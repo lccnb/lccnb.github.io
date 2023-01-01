@@ -4,19 +4,26 @@
   
     
     <entry>
-      <title>good</title>
-      <link href="/2022/09/03/good/"/>
-      <url>/2022/09/03/good/</url>
+      <title>测试文章</title>
+      <link href="/2023/01/01/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/"/>
+      <url>/2023/01/01/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="good-afternoon，everyone！"><a href="#good-afternoon，everyone！" class="headerlink" title="good afternoon，everyone！"></a>good afternoon，everyone！</h1>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><img src="2.jpg" alt="dsa"></p>]]></content>
       
       
       
-        <tags>
-            
-            <tag> test </tag>
-            
-        </tags>
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ROS(1)</title>
+      <link href="/2023/01/01/ROS/"/>
+      <url>/2023/01/01/ROS/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h3 id="ROS基础较为重要的点"><a href="#ROS基础较为重要的点" class="headerlink" title="ROS基础较为重要的点"></a>ROS基础较为重要的点</h3><h4 id="一、架构图"><a href="#一、架构图" class="headerlink" title="一、架构图"></a>一、架构图</h4><p><img src="1.png"></p><h3 id="二、节点、消息、话题、服务、ros-master"><a href="#二、节点、消息、话题、服务、ros-master" class="headerlink" title="二、节点、消息、话题、服务、ros master"></a>二、节点、消息、话题、服务、ros master</h3><p><img src="2.png"></p><p>    节点：执行运算任务的进程，通常就是一个代码文件</p><p>    消息：节点间的通信，消息是一种数据结构</p><p>    话题：一个节点可以向特定的话题发布消息或者接收来自某个话题的消息</p><p>    服务：不同于发布&#x2F;订阅模式，我们将同步双向通信模式称为服务，类似于web服务器。</p><p>    ROS MASTER:所以节点都要向它注册，由他来提供节点间的通信，查找，连接各种问题。</p><h3 id="三、文件系统"><a href="#三、文件系统" class="headerlink" title="三、文件系统"></a>三、文件系统</h3><p><img src="3.png"></p><h6 id="元功能包："><a href="#元功能包：" class="headerlink" title="元功能包："></a>元功能包：</h6><p>实现某一个功能的所有功能包的集合。例如：完成导航这个功能的功能包中含有建图、激光雷达、里程计、传感器等等功能包</p><h3 id="四、三种通信机制"><a href="#四、三种通信机制" class="headerlink" title="四、三种通信机制"></a>四、三种通信机制</h3><h6 id="4-1、话题通信机制"><a href="#4-1、话题通信机制" class="headerlink" title="4.1、话题通信机制"></a>4.1、话题通信机制</h6><p><img src="4.png"></p><p>    1) 发布者通过1234端口使用RPC协议向master发布注册信息，包含所发布消息的话题名。</p><p>    2） 订阅者也同样使用RPC协议向master发送注册信息，包含所要订阅的话题名。</p><p>    3） 信息匹配：ROS master会根据注册表中信息与接受者所要订阅的话题匹配，一旦找到，将通过RPC协议向订阅者发送发布者的RPC地址信息</p><p>    4） 订阅者收到发布者的地址后，将尝试通过RPC协议向发布者发送连接请求，包括传输订阅的话题名、消息类型、以及通信协议。</p><p>    5）发布者接收到连接请求后，任然通过RPC协议向订阅者确认连接请求，并发送自身的TCP地址信息。</p><p>    6） 订阅者收到确认信息后，使用TCP与发布者建立连接。</p><p>    7） 成功连接后，不在需要ROS naster， 发布者可以向订阅者发送消息。</p><p>    note：前5个步骤都需要使用到RPC协议，后两个步骤使用TCP协议。ROS master主要作用就是帮助节点间建立连接。但不参与最终的数据传输。</p><h6 id="4-2、-服务通信机制"><a href="#4-2、-服务通信机制" class="headerlink" title="4.2、 服务通信机制"></a>4.2、 服务通信机制</h6><p><img src="5.png"></p><p>   之前有提过：服务类似于web服务器的通信方式（应答）</p><p>    1） talker通过1234端口使用RPC协议向master发布注册信息，包含所提供的服务名。</p><p>    2） listener也同样使用RPC协议向master发送注册信息，包含所要查找的服务名。</p><p>    3） master根据listener的订阅信息在注册表中匹配，若找到，将通过RPC协议发送talker的TCP地址。</p><p>    4） listener接收到地址信息后，使用TCP与talker建立连接，并发送服务的请求数据。</p><p>    5） talker接收到服务请求和参数后，开始执行服务功能，完成后，向listener发送应答数据。</p><h4 id="话题通信和服务通信最大的区别："><a href="#话题通信和服务通信最大的区别：" class="headerlink" title="话题通信和服务通信最大的区别："></a>话题通信和服务通信最大的区别：</h4><p>    话题通信通常都是发布者发送，订阅者被动的接收；而listener想要自主获取数据该怎么办呢？服务通信就解决了这个问题，它向master注册了一个特定的服务，listener可以向talker发送请求（采用应答方式）</p><h6 id="4-3、参数管理机制"><a href="#4-3、参数管理机制" class="headerlink" title="4.3、参数管理机制"></a>4.3、参数管理机制</h6><p><img src="6.jpg"></p><p>    参数类似于ROS中的全局变量，有master管理，通信机制不涉及TCP、UDP通信。</p><p>    1） talker使用RPC向master发送参数设置数据，包含参数名和数值，master将其保存至参数列表中。</p><p>    2） listener也通过RPC向master发送参数查找请求，包含要查找的参数名。</p><p>    3） master根据listener欲查找的参数名在参数列表中匹配，找到后将参数数值发送给listener。（若talker将参数数值变动，listener无法知晓）</p>]]></content>
+      
+      
       
     </entry>
     
